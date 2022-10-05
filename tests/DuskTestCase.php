@@ -15,7 +15,7 @@ abstract class DuskTestCase extends BaseTestCase
     /**
      * @var \Symfony\Component\Process\Process
      */
-    protected static $webServerProc;
+    private static $webServerProc;
 
     /**
      * Prepare for Dusk test execution.
@@ -26,17 +26,16 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail() && ! static::hasBrowserStackKey()) {
+        if (! static::runningInSail()) {
             static::startChromeDriver();
         }
 
-        dump($_SERVER);
-        static::$webServerProc = static::createServerProcess();
-        static::$webServerProc->start();
+        self::$webServerProc = static::createServerProcess();
+        self::$webServerProc->start();
 
         static::afterClass(function () {
-            if (static::$webServerProc) {
-                static::$webServerProc->stop();
+            if (self::$webServerProc) {
+                self::$webServerProc->stop(0);
             }
         });
     }
