@@ -30,6 +30,7 @@ abstract class DuskTestCase extends BaseTestCase
             static::startChromeDriver();
         }
 
+        dump($_ENV);
         static::$webServerProc = static::createServerProcess();
         static::$webServerProc->start();
 
