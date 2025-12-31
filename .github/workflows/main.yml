@@ -113,7 +113,7 @@ jobs:
 
       - name: Upload tests reports
         if: needs.prepare.outputs.has-codeclimate == '1'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-reports-${{ matrix.php }}
           path: tests/reports/codeclimate.${{ matrix.php }}.json
@@ -196,7 +196,7 @@ jobs:
 
       - name: Upload e2e tests logs
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: e2e-logs
           path: |
