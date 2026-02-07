@@ -92,7 +92,7 @@ jobs:
 
       - name: Download assets
         id: download
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ needs.build.outputs.target-env }}
           path: public
@@ -178,7 +178,7 @@ jobs:
 
       - name: Download assets
         id: download
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ needs.build.outputs.target-env }}
           path: public
