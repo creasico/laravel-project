@@ -2,7 +2,7 @@ import { router } from '@inertiajs/core'
 import type { Config } from 'ziggy-js'
 import ziggyRoute from 'ziggy-js'
 
-import { Ziggy } from '~/ziggy.cjs'
+import { Ziggy } from '~/ziggy.js'
 
 export type AppRoutes = typeof Ziggy.routes
 export type RouteFunction = typeof ziggyRoute

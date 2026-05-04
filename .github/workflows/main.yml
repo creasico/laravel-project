@@ -14,8 +14,10 @@ jobs:
   prepare:
     name: Prepare
     uses: projek-xyz/actions/.github/workflows/configure.yml@main
+    with:
+      php-version: 8.2
     secrets:
-      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
   build:
     name: Build
@@ -27,7 +29,7 @@ jobs:
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     with:
       branch: ${{ needs.prepare.outputs.target-branch }}
-      composer-cache: ${{ needs.prepare.outputs.composer-cache }}
+      composer-cache-dir: ${{ needs.prepare.outputs.composer-cache-dir }}
       composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
       sentry-project: ${{ vars.SENTRY_PROJECT }}
 
@@ -80,7 +82,7 @@ jobs:
       - name: Prepare Composer Cache
         uses: actions/cache@v5
         with:
-          path: ${{ needs.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache-dir }}
           key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
@@ -100,23 +102,16 @@ jobs:
       - name: Run unit tests
         run: php artisan test --ansi --coverage
 
-      - name: Generate reports for CodeClimate
-        id: reports
-        if: needs.prepare.outputs.has-codeclimate == '1'
+      - name: Generate reports for Coveralls
+        if: needs.prepare.outputs.has-coveralls == '1'
+        uses: coverallsapp/github-action@v2
         env:
-          CODECLIMATE_REPORT: tests/reports/codeclimate.${{ matrix.php }}.json
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
-        run: |
-          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
-          ./cc-test-reporter format-coverage -t clover -o $CODECLIMATE_REPORT tests/reports/clover.xml
-
-      - name: Upload tests reports
-        if: needs.prepare.outputs.has-codeclimate == '1'
-        uses: actions/upload-artifact@v7
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         with:
-          name: test-reports-${{ matrix.php }}
-          path: tests/reports/codeclimate.${{ matrix.php }}.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: php-${{ matrix.php }}
+          file: tests/coverage/clover.xml
+          parallel: true
 
   e2e:
     name: Integration Test on BrowserStack
@@ -166,7 +161,7 @@ jobs:
       - name: Prepare Composer Cache
         uses: actions/cache@v5
         with:
-          path: ${{ needs.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache-dir }}
           key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
@@ -209,6 +204,4 @@ jobs:
     uses: projek-xyz/actions/.github/workflows/report.yml@main
     needs: [prepare, units]
     with:
-      has-codeclimate: ${{ needs.prepare.outputs.has-codeclimate == '1' }}
-    secrets:
-      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      has-coveralls: ${{ needs.prepare.outputs.has-coveralls == '1' }}
