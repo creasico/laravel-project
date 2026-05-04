@@ -10,12 +10,12 @@
   </testsuites>
   <coverage>
     <report>
-      <clover outputFile="tests/reports/clover.xml"/>
+      <clover outputFile="tests/coverage/clover.xml"/>
       <html outputDirectory="tests/coverage"/>
     </report>
   </coverage>
   <logging>
-    <junit outputFile="tests/reports/junit.xml"/>
+    <junit outputFile="tests/coverage/junit.xml"/>
   </logging>
   <php>
     <env name="APP_ENV" value="testing"/>
