@@ -22,10 +22,10 @@
   "require": {
     "php": ">=8.1",
     "creasi/laravel-base": "dev-main",
-    "creasi/laravel-nusa": "^0.1.5",
+    "creasi/laravel-nusa": "^0.1.18",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
-    "inertiajs/inertia-laravel": "^0.6.9",
+    "inertiajs/inertia-laravel": "^v2.0",
     "laravel/framework": "^10.0",
     "laravel/sanctum": "^3.0",
     "sentry/sentry-laravel": "^4.0"
@@ -99,6 +99,7 @@
   "extra": {
     "laravel": {
       "dont-discover": [
+        "creasi/laravel-base",
         "laravel/telescope"
       ]
     }
