@@ -27,7 +27,7 @@ concurrency:
 jobs:
   prepare:
     name: Prepare
-    uses: projek-xyz/actions/.github/workflows/configure.yml@711af5ee0f1a28b1554022d28d3e147c6a9df1fe # main @ 2026-11-01
+    uses: projek-xyz/actions/.github/workflows/configure.yml@a84ced1eab6fac0576ed5cdd43f6ee0dfa5044a3 # main @ 2026-11-02
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
       php-version: 8.2
@@ -37,7 +37,7 @@ jobs:
   build:
     name: Build
     needs: prepare
-    uses: projek-xyz/actions/.github/workflows/build.yml@711af5ee0f1a28b1554022d28d3e147c6a9df1fe # main @ 2026-11-01
+    uses: projek-xyz/actions/.github/workflows/build.yml@a84ced1eab6fac0576ed5cdd43f6ee0dfa5044a3 # main @ 2026-11-02
     secrets:
       ACCESS_TOKEN: ${{ secrets.PAT }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
